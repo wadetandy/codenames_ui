@@ -1,32 +1,19 @@
-import React, {
-  DetailedHTMLProps,
-  ButtonHTMLAttributes,
-  useState
-} from 'react'
+import React, { useState } from 'react'
 
 import { useHistory } from 'react-router-dom'
 
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 
-const CREATE_CODENAMES_GAME = gql`
-  mutation CreateCodenamesGame {
-    createCodenamesGame {
-      success
-      errors
-      game {
-        id
-      }
-    }
-  }
-`;
+import createCodenamesGame from '../graphql/mutations/createCodenamesGame'
+import { CreateCodenamesGame } from '../graphql/mutations/types/CreateCodenamesGame'
+import ActionButton from '../components/ActionButton';
 
 export default function Welcome() {
   const history = useHistory()
   const [view, setView] = useState('default' as 'default' | 'creating' | 'join')
   const [gameId, setGameId] = useState("")
 
-  const [createGame] = useMutation(CREATE_CODENAMES_GAME);
+  const [createGame] = useMutation<CreateCodenamesGame>(createCodenamesGame);
 
   async function createNewGame() {
     setView('creating')
@@ -34,9 +21,14 @@ export default function Welcome() {
     try {
       let { data } = await createGame()
 
+      if (!data || !data.createCodenamesGame) return
+
       let response = data.createCodenamesGame
       if (response.success) {
-        history.push(`/codenames/${response.game.id}`)
+        let game = response.game
+        if (!game) { return }
+
+        history.push(`/codenames/${game.id}`)
       } else {
         console.error('FAILED', response.errors)
       }
@@ -82,7 +74,7 @@ export default function Welcome() {
             className="text-lg leading-normal p-6 text-gray-800 rounded"
             placeholder="Enter game ID"
             value={gameId}
-            onInput={(event) => setGameId((event.target as any).value)}
+            onChange={(event) => setGameId(event.target.value)}
           />
           <ActionButton
             disabled={!gameId}
@@ -92,15 +84,4 @@ export default function Welcome() {
         </div>
       )
   }
-}
-
-function ActionButton({
-  children,
-  ...buttonProps
-}: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) {
-  return (
-    <button className="p-6 m-4 bg-gray-200 text-gray-600 rounded" {...buttonProps}>
-      { children }
-    </button>
-  )
 }

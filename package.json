@@ -21,7 +21,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "get-schema": "yarn run apollo schema:download --endpoint=http://localhost:9292/graphql graphql-schema.json",
-    "generate-types": "yarn run apollo codegen:generate --localSchemaFile=graphql-schema.json --target=typescript --includes=src/**/*.ts --tagName=gql --addTypename --globalTypesFile=src/generated/graphql-types.ts types"
+    "generate-types": "yarn run apollo codegen:generate --localSchemaFile=graphql-schema.json --target=typescript --includes=src/**/*.ts --tagName=gql --addTypename --globalTypesFile=src/graphql/types/graphql-global-types.ts types"
   },
   "eslintConfig": {
     "extends": "react-app"

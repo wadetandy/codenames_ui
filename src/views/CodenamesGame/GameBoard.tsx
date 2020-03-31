@@ -1,16 +1,21 @@
 import React from 'react'
 import CardTile from './CardTile'
+import { CodenamesWordOwner } from '../../graphql/types/graphql-global-types'
 
+export type Word = {
+  word: string
+  owner: CodenamesWordOwner
+}
 
 export type GameBoardProps = {
-  wordList: Record<string, any>[]
-  onWordSelect?: (word: any) => void
+  wordList: Word[]
+  onWordSelect?: (word: Word) => void
 }
 
 export default function GameBoard({ wordList }: GameBoardProps) {
   return (
-    <div>
-      { wordList.map((word) => <CardTile word={word} onClick={() => }/>) }
+    <div className="flex justify-between flex-wrap">
+      { wordList.map((word) => <CardTile className="w-1/5" word={word} onClick={() => {}}/>) }
     </div>
   )
 

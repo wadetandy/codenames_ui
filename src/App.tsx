@@ -7,6 +7,8 @@ import {
 
 import './styles/App.css';
 import routesConfig from './routes-config'
+import AuthenticatedRoute from './auth/AuthenticatedRoute';
+import StartSession from './views/StartSession';
 
 
 function App() {
@@ -15,8 +17,10 @@ function App() {
       <div className="content">
         <Router>
           <Switch>
+            <Route path="/login" component={StartSession}/>
+
             {routesConfig.map((route, i) =>
-              <Route key={i} {...route}/>
+              <AuthenticatedRoute key={i} {...route}/>
             )}
           </Switch>
         </Router>

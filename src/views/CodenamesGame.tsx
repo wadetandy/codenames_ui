@@ -1,34 +1,22 @@
 import React, {
 } from 'react'
 import { useParams } from 'react-router-dom'
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
 import GameBoard from './CodenamesGame/GameBoard';
 
-const GET_GAME = gql`
-  query LookupGame($id: ID!) {
-    game(id: $id) {
-      id
-      firstMove
-      nextMove
-      wordList {
-        word
-        owner
-      }
-    }
-  }
-`
+import getGame from '../graphql/queries/getGame'
+import { GetGame } from '../graphql/queries/types/GetGame'
 
 export default function CodenamesGame() {
   const { id } = useParams()
 
-  const { loading, data } = useQuery(GET_GAME, {
+  const { loading, data } = useQuery<GetGame>(getGame, {
     variables: { id }
   })
 
-  if (loading) return "Loading..."
+  if (loading || !data) return "Loading..."
 
   return (
-    <GameBoard wordList={ data.game.wordList }/>
+    <GameBoard wordList={ data.codenamesGame.wordList }/>
   )
 }

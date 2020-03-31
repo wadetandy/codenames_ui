@@ -9,6 +9,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 const client = new ApolloClient({
   uri: 'http://localhost:9292/graphql',
+  credentials: 'include'
 });
 
 const AppWithApollo = () => (
